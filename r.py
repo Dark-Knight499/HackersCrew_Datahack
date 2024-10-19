@@ -70,22 +70,22 @@ class QuestionDifficultyAdjuster:
         )
         return history
 
-adjuster = QuestionDifficultyAdjuster(3)
+adjuster = QuestionDifficultyAdjuster(5)
 def demonstrate_model():
     global adjuster
     
     history = adjuster.train(num_samples=1000, epochs=200)
     
-    difficulties = [5, 5, 6]
-    correct_answers = [1, 1, 1]
+    difficulties = [5, 5, 6, 8, 9]
+    correct_answers = [1, 1, 1, 1, 0]
     
     next_difficulty = adjuster.predict_next_difficulty(difficulties, correct_answers)
     print(f"Previous difficulties: {difficulties}")
     print(f"Correct answers: {correct_answers}")
     print(f"Recommended next difficulty: {next_difficulty}")
     
-    difficulties = [5, 5, 4]
-    correct_answers = [1, 1, 0]
+    difficulties = [5, 5, 4, 4, 3]
+    correct_answers = [1, 1, 0, 0, 1]
     
     next_difficulty = adjuster.predict_next_difficulty(difficulties, correct_answers)
     print(f"\nPrevious difficulties: {difficulties}")
