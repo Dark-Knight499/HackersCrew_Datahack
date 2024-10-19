@@ -1,7 +1,7 @@
 import Image from "next/image";
 import {SidebarDemo}  from "./components/Sidebar"
 import { NextButton } from "./components/NextButton";
-import { CardSpotlightDemo } from "./components/CardSpotlightDemo";
+import { CardStackDemo } from "./components/CardstackDemo";
 
 export default function Home() {
   return (
@@ -9,7 +9,7 @@ export default function Home() {
 
         <SidebarDemo />
         <NextButton />
-        <CardSpotlightDemo />
+        <CardStackDemo />
         
     </div>
   );
