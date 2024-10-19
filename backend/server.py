@@ -26,29 +26,27 @@ sample_questions = [
     Question(2, "Which is the capital of France?", ["London", "Berlin", "Paris", "Madrid"], "Paris"),
     Question(3, "What is the largest planet in our solar system?", ["Earth", "Mars", "Jupiter", "Saturn"], "Jupiter"),
 ]
-
+def generate_questions(res):
+    pass
 def choose_question(results):
-    return sample_questions  
-
-def send_question(question):
-    return question.answer  
-
-def evaluate_question(answer, question):
-    is_correct = answer == question.answer 
-    return question.class_to_json()
+    return sample_questions
 
 @app.route("/generate/questions/<string:user>")
-def generate_question(user):
+def send_question(user):
+    res = request.json()
+    db["user"]["questions"] = generate_questions(res)
+
+@app.route("/send/questions/<string:user>")
+def send_question(user):
     if user not in db:
-        db["user"] = []
-    question = choose_question(db["user"])
+        db["user"]["results"] = []
+    question = choose_question(db["user"]["questions"])
     return json.dumps(question)
+
 @app.route("/answer/<string:user>")
 def append_answer(user):
-    if user not in db:
-        db["user"] = []
-    question = choose_question(db["user"])
-    return json.dumps(question)
+    res = request.get_json()    
+    db["user"]["results"].append(res.get("evaluation"))
 
 if __name__ == "__main__":
     app.run(debug=True)
