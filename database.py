@@ -16,12 +16,12 @@ db_config = {
 
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(**db_config)
 
-async def create_user(email_id, username, password):
+def create_user(email_id, password):
     connection = connection_pool.get_connection()
     cursor = connection.cursor(dictionary=True)
     try:
         cursor.execute(
-            "INSERT INTO user (emailId, password) VALUES (%s, %s)",
+            "INSERT INTO user (email, password) VALUES (%s, %s)",
             (email_id, password)
         )
         connection.commit()
@@ -29,7 +29,7 @@ async def create_user(email_id, username, password):
         cursor.close()
         connection.close()
 
-async def linechart(user):
+def linechart(user):
     connection = connection_pool.get_connection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -41,9 +41,9 @@ async def linechart(user):
         GROUP BY q.quiz_id
         ORDER BY q.quiz_id
         """
-        cursor.execute(query, (user))
+        cursor.execute(query, (user,))
 
-        results = [count[0] for count in cursor.fetchall()]
+        results = [count['correct_count'] for count in cursor.fetchall()]
         connection.commit()
         return results
         
@@ -51,7 +51,7 @@ async def linechart(user):
         cursor.close()
         connection.close()
 
-async def piechart(user):
+def piechart(user):
     connection = connection_pool.get_connection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -65,7 +65,7 @@ async def piechart(user):
         GROUP BY ques.q_check
         ORDER BY ques.q_check
         """
-        cursor.execute(query, (user))
+        cursor.execute(query, (user,))
 
         counts = {0: 0, 1: 0, 2: 0}
         for (check_value, count) in cursor:
@@ -78,7 +78,7 @@ async def piechart(user):
         cursor.close()
         connection.close()
 
-async def radarchart(user):
+def radarchart(user):
     connection = connection_pool.get_connection()
     cursor = connection.cursor(dictionary=True)
     try:
@@ -93,20 +93,30 @@ async def radarchart(user):
         ORDER BY ques.diff
         """
         
-        cursor.execute(query, (user))
-        
+        cursor.execute(query, (user,))
+
         counts = [0] * 10
         
-        for (diff, count) in cursor:
-                counts[diff-1] = count
+        for row in cursor:
+            diff = row['diff']
+            count = row['count']
+            counts[diff-1] = count 
+
                 
         return counts
       
     finally:
+        cursor.fetchall()
         cursor.close()
         connection.close()
 
-async def radialchart(user):
+def radialchart(user):
     count = piechart(user)
-    return count[1]/(count[0] + count[1] + count[2])
+    return count[1]/(count[0] + count[1] + count[2] + 1)
 
+
+print(piechart("user9@example.com"))
+print(radarchart("user9@example.com"))
+print(linechart("user9@example.com"))
+print(radialchart("user9@example.com"))
+create_user("abc@gmail.com", "1234567")
