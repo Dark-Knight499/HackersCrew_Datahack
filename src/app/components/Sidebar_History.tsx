@@ -4,7 +4,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
 import {
   IconArrowLeft,
 } from "@tabler/icons-react";
-import { Book,History,LayoutDashboard,Search ,Volleyball,ArrowUpToLine,Bot} from 'lucide-react';
+import { Book,History,LayoutDashboard,Search ,Volleyball,ArrowUpToLine,Bot, ChartBar} from 'lucide-react';
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -60,6 +60,13 @@ export function SidebarHistory() {
         href: "https://chatbot-datahack-847s.vercel.app/",
         icon: (
           <Bot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        ),
+      },
+      {
+        label: "Analytics",
+        href: "https://62dc-202-134-191-26.ngrok-free.app/api/xai",
+        icon: (
+          <ChartBar className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
         ),
       },
     {
