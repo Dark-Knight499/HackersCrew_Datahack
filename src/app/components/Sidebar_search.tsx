@@ -58,7 +58,7 @@ export function SidebarSearch() {
       },
       {
         label: "ChatBot",
-        href: "/",
+        href: "https://chatbot-datahack-847s.vercel.app/",
         icon: (
           <Bot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
         ),

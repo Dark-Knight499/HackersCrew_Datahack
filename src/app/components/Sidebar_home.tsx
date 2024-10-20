@@ -19,7 +19,7 @@ export function SidebarDemo() {
     { label: "Suggested Materials", href: "/materials", icon: <Book className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" /> },
     { label: "History", href: "/history", icon: <History className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" /> },
     { label: "Search", href: "/search", icon: <Search className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" /> },
-    { label: "ChatBot", href: "/", icon: <Bot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" /> },
+    { label: "ChatBot", href: "https://chatbot-datahack-847s.vercel.app/", icon: <Bot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" /> },
     { label: "Logout", href: "/", icon: <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" /> },
   ];
   
