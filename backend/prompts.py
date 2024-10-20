@@ -14,5 +14,5 @@ json looking like
             "options": ["Cheetah","Tiger","Lion","Elephant"],
             "answer": "Cheetah"
 }}
-JUST OUTPUT JSON ONLY
+JUST OUTPUT JSON ONLY NO OTHER THINGS
 """

@@ -1,13 +1,20 @@
 from langchain_core.prompts import PromptTemplate
 from langchain.chains import LLMChain
+from flask_cors import CORS
 from langchain_core.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
 from dotenv import load_dotenv
 from prompts import *
-from flask import Flask , json, jsonify, request
+from flask import Flask , json, jsonify, request , render_template
+from recommend import Recommend
 app = Flask(__name__)
+CORS(app)
+@app.route('/')
+def normal():
+    return "Hello user !!!"
 load_dotenv()
+
 db = {
 
 }
@@ -27,60 +34,51 @@ question_rating_prompt = PromptTemplate(
       input_variables=["chat_history","rating"],
       template=start_session_prompt
    )
-# # llm = OpenAI(temperature=0)
-# # Notice that "chat_history" is present in the prompt template
-# template = """You are a nice chatbot having a conversation with a human.
 
-# Previous conversation:
-# {chat_history}
 
-# New human question: {question}
-# Response:"""
-# prompt = PromptTemplate.from_template(template)
-# # Notice that we need to align the `memory_key`
 memory = ConversationBufferMemory(memory_key="chat_history")
-# conversation = LLMChain(
-#     llm=llm,
-#     prompt=prompt,
-#     verbose=True,
-#     memory=memory
-# )
-para = """
-"Bad Romance" is a song by American singer Lady Gaga from her third extended play (EP), The Fame Monster (2009)—the reissue of her debut studio album, The Fame (2008). Gaga wrote and produced the song with RedOne. Following an unauthorized demo leak, Gaga premiered the song's final version during the finale of Alexander McQueen's 2010 Paris Fashion Week show in October 2009 and released it as the lead single from The Fame Monster later that month. Musically, it is an electropop and dance-pop song with a spoken bridge. Inspired by German house and techno, the song was developed as an experimental pop record. Lyrically, Gaga drew from the paranoia she experienced while on tour and wrote about her attraction to unhealthy romantic relationships.
+def gemini_generate(diff, chat_history):
+    return llm.invoke(question_rating_prompt.format(chat_history=chat_history, rating=diff)).content
 
-"Bad Romance" was acclaimed by music critics for its chorus, beat and hook. Retrospective reviewers called it Gaga's best song. It topped the charts in more than 20 countries and sold 12 million copies worldwide, becoming one of the best-selling singles of all time. In the US, the song peaked at number two on the Billboard Hot 100 chart and was certified eleven times Platinum by the Recording Industry Association of America, having sold 5.9 million digital downloads as of 2019. "Bad Romance" won a Grammy Award for Best Female Pop Vocal Performance, and was included in annual "best-of" lists of the media outlets Rolling Stone and Pitchfork; the former named it one of the 100 Greatest Songs of the 21st Century and 500 Greatest Songs of All Time. In a 2017 journal, which studied structural patterns in melodies of earworm songs, the American Psychological Association called "Bad Romance" the catchiest in the world.
+def get_diff(results):
+    return Recommend().predict_next_difficulty(results)
 
-The music video for "Bad Romance", directed by Francis Lawrence, features Gaga inside a surreal white bathhouse where she is kidnapped and drugged by supermodels who sell her to the Russian mafia for sexual slavery. The video ends as Gaga immolates the man who bought her. It garnered acclaim from critics for its fashion, choreography, costumes and symbolism. Briefly becoming the most-viewed YouTube video in 2010, it received a record ten nominations at the MTV Video Music Awards, winning seven, including Video of the Year. It received the Grammy Award for Best Music Video and was named the best music video of the 21st century by Billboard. Gaga has performed "Bad Romance" at television shows, award ceremonies, her concert tours and residency shows, and the Super Bowl LI halftime show.
-"""
-# import time
-# for i in range(2):
-#     print(llm.invoke(start_session_prompt_template.format(chat_history = para , rating = f"{i}")).content)
-#     time.sleep(1)
-#     """
-#     ->generate\db
-#     ->get\question
-#     ->get\evaluation
-#     ->\select\Question
+@app.route("/api/postcontext/<string:user>", methods=['POST'])
+def post_content(user):
+    res = request.get_json()
+    db[user] = {
+        "content": res.get("context"),
+        "result": []
+    }
+    return jsonify({"status": db[user]["content"]}), 200
 
-#     """
-def generate_question():
-    
-@app.route("/start/<string:user>")
-def send_question(user):
-    res = request.json()
-    db["user"]["text"] = res.get("text")
+@app.route("/api/getquestion/<string:user>", methods=['GET'])
+def get_question(user):
+    if user not in db or "result" not in db[user]:
+        return jsonify({"error": "User not found or no results available"}), 404
 
-@app.route("/select/questions/<string:user>")
-def send_question(user):
-    db["user"]["result"]
-    return generate_question()
+    diff = get_diff(db[user]["result"])
+    question = gemini_generate(diff, db[user]["content"])
+    return jsonify({"question": question}), 200
 
-    
+@app.route("/api/postanswer/<string:user>", methods=['POST'])
+def post_answer(user):
+    if user not in db:
+        return jsonify({"error": "User not found"}), 404
 
-@app.route("/answer/<string:user>")
-def append_answer(user):
-    res = request.get_json()    
-    db["user"]["results"].append(res.get("evaluation"))
+    res = request.get_json()
+    db[user]["result"].append((res.get("rating"), res.get("response")))
+    return jsonify({"status": "success"}), 200
+
+@app.route("/api/xai")
+def home():
+   return render_template('index.html')
+
+@app.route("/api/refs/<string:user>")
+def refs(user):
+   return render_template('index.html')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

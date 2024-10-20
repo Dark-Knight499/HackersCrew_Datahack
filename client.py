@@ -5,10 +5,8 @@ from typing import List, Optional
 
 class PDFSummarizer:
     def __init__(self, api_key: Optional[str] = None):
-        """Initialize the PDF Summarizer with Groq LLM."""
         load_dotenv()
         
-        # Set up Groq LLM
         self.llm = ChatGroq(
             groq_api_key=api_key or os.getenv("GROQ_API_KEY"),
             model_name="mixtral-8x7b-32768",  # Using Mixtral model for better performance

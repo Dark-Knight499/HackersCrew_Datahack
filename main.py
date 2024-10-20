@@ -1,5 +1,5 @@
 import os
-import PyPDF2  # For PDF extraction using PyPDF2
+import PyPDF2
 from dotenv import load_dotenv
 import google.generativeai as genai
 import asyncio
