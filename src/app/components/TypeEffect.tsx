@@ -3,13 +3,13 @@ import { TypewriterEffectSmooth } from "./ui/typewriter-effect";
 export function TypewriterEffectSmoothDemo() {
   const words = [
     {
-      text: "",
+      text: "Evaluate",
     },
     {
-      text: "Artist",
+      text: "Your ",
     },
     {
-      text: "on",
+      text: "Learning Experience at",
     },
     
     {
