@@ -26,7 +26,7 @@ function Navbar({ className }: { className?: string }) {
     >
       <div className="flex items-center justify-between p-4 bg-white shadow-md rounded-lg">
         <Link href="/home">
-          <span className="text-xl font-bold">Logo</span>
+          <span className="text-xl font-bold">Brainwave</span>
         </Link>
         
         {/* Hamburger menu for small screens */}
@@ -60,7 +60,6 @@ function Navbar({ className }: { className?: string }) {
               </div>
             </MenuItem>
             <Link href="/home"><MenuItem setActive={setActive} active={active} item="Home" /></Link>
-            <Link href="/aboutus"><MenuItem setActive={setActive} active={active} item="About Us" /></Link>
           </Menu>
         </div>
       </div>
@@ -72,7 +71,6 @@ function Navbar({ className }: { className?: string }) {
           <Link href="/premium"><div className="p-4 hover:bg-gray-100">Premium</div></Link>
           <Link href="/library"><div className="p-4 hover:bg-gray-100">Library</div></Link>
           <Link href="/search"><div className="p-4 hover:bg-gray-100">Search</div></Link>
-          <Link href="/aboutus"><div className="p-4 hover:bg-gray-100">About Us</div></Link>
           <div className="p-4 hover:bg-gray-100">
             <details>
               <summary>Account</summary>
