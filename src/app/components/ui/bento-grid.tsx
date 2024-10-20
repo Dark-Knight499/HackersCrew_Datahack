@@ -1,3 +1,4 @@
+// BentoGrid.tsx
 import { cn } from "../../../utils/cn";
 
 export const BentoGrid = ({
@@ -8,13 +9,17 @@ export const BentoGrid = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <div
-      className={cn(
-        "grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto ",
-        className
-      )}
-    >
-      {children}
+    <div className="w-full bg-neutral-50 dark:bg-neutral-950">
+      <div className="px-4 md:px-6 lg:px-8 py-8 md:py-12 lg:py-16 w-full">
+        <div
+          className={cn(
+            "grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-4 max-w-[100rem] mx-auto",
+            className
+          )}
+        >
+          {children}
+        </div>
+      </div>
     </div>
   );
 };

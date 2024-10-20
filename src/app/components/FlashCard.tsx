@@ -1,156 +1,138 @@
-import React, { useState } from 'react';
+"use client";
+import { useState } from "react";
 import { CardStack } from "./ui/card-stack";
-import { cn } from "../../utils/cn";
-import { Button } from "../components/ui/moving-border";
-import { SkipForward, Send, ArrowRight } from 'lucide-react';
-
-interface CardItem {
-  id: number;
-  name: string;
-  designation: string;
-  content: React.ReactNode;
-  correctAnswer: string;
-}
+import { cn } from "@/lib/utils";
+import { ArrowRight, Check, X } from "lucide-react"; // Importing icons
 
 export function CardStackDemo() {
-  const [activeCard, setActiveCard] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [score, setScore] = useState<number>(0);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
-  const handleNext = () => {
-    if (isSubmitted) {
-      setActiveCard((prev) => (prev + 1) % CARDS.length);
-      setSelectedOption(null);
-      setIsSubmitted(false);
-    }
-  };
-
-  const handleSkip = () => {
-    let nextCard;
-    do {
-      nextCard = Math.floor(Math.random() * CARDS.length);
-    } while (nextCard === activeCard);
-    setActiveCard(nextCard);
-    setSelectedOption(null);
-    setIsSubmitted(false);
-  };
+  const [currentCardIndex, setCurrentCardIndex] = useState<number>(0);
 
   const handleOptionSelect = (option: string) => {
-    if (!isSubmitted) {
-      setSelectedOption(option);
-    }
+    setSelectedOption(option);
   };
 
   const handleSubmit = () => {
-    if (selectedOption && !isSubmitted) {
-      setIsSubmitted(true);
-      if (selectedOption === CARDS[activeCard].correctAnswer) {
-        setScore(prevScore => prevScore + 1);
-      }
+    if (selectedOption === CARDS[currentCardIndex].correctAnswer) {
+      setScore((prevScore) => prevScore + 1);
     }
+    setSelectedOption(null); // Reset the selected option after submitting
+    handleNext(); // Automatically go to the next card after submitting
+  };
+
+  const handleNext = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % CARDS.length);
+    setSelectedOption(null); // Reset the selected option for the next card
+  };
+
+  const handleSkip = () => {
+    handleNext(); // Skip to the next card
   };
 
   return (
-    <div className="relative min-h-screen bg-transparent p-4 flex flex-col items-center justify-center text-black">
-      <div className="absolute top-4 right-4 text-lg font-bold bg-transparent px-4 py-2 rounded-full">
-        Score: {score}
-      </div>
-      
-      <div className="flex flex-col items-center w-full max-w-3xl">
-        <div className="w-full mb-8">
-          <CardStack
-            items={CARDS}
-            activeItem={activeCard}
-            onCardChange={setActiveCard}
-          />
-        </div>
-        
-        <div className="w-full bg-transparent rounded-lg p-6">
-          <div className="grid grid-cols-2 gap-6 mb-8">
-            {['A', 'B', 'C', 'D'].map((option) => (
-              <Button
-                key={option}
-                onClick={() => handleOptionSelect(option)}
-                className={cn(
-                  "text-lg font-semibold border-2 border-gray-300 rounded-lg p-4 bg-transparent text-black",
-                  selectedOption === option && !isSubmitted ? "border-gray-600" : "",
-                  isSubmitted && option === CARDS[activeCard].correctAnswer ? "border-gray-600" : "",
-                  "hover:border-gray-600"
-                )}
-              >
-                {option}
-              </Button>
-            ))}
-          </div>
-
-          <div className="flex space-x-6 w-full justify-between">
-            <Button 
-              onClick={handleSkip} 
-              className="px-6 py-3 flex-1 font-semibold rounded-lg border-2 border-gray-300 hover:border-gray-600 bg-transparent text-black"
-              disabled={isSubmitted}
-            >
-              <SkipForward className="w-6 h-6" />
-            </Button>
-            <Button 
-              onClick={handleSubmit} 
+    <div className="h-[40rem] flex flex-col items-center justify-center w-full">
+      <CardStack items={CARDS} activeIndex={currentCardIndex} />
+      <div className="mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {CARDS[currentCardIndex].options.map((option) => (
+            <button
+              key={option}
               className={cn(
-                "px-6 py-3 flex-1 font-semibold rounded-lg border-2 border-gray-300 bg-transparent text-black",
-                (!selectedOption || isSubmitted) ? "opacity-50" : "hover:border-gray-600"
+                "border p-4 rounded-lg transition-all",
+                selectedOption === option ? "bg-blue-500 text-white" : "bg-white"
               )}
-              disabled={!selectedOption || isSubmitted}
+              onClick={() => handleOptionSelect(option)}
             >
-              <Send className="w-6 h-6" />
-            </Button>
-            <Button 
-              onClick={handleNext} 
-              className={cn(
-                "px-6 py-3 flex-1 font-semibold rounded-lg border-2 border-gray-300 bg-transparent text-black",
-                !isSubmitted ? "opacity-50" : "hover:border-gray-600"
-              )}
-              disabled={!isSubmitted}
-            >
-              <ArrowRight className="w-6 h-6" />
-            </Button>
-          </div>
+              {option}
+            </button>
+          ))}
         </div>
+        <div className="flex gap-4 mt-6"> {/* Increased margin from mt-4 to mt-6 */}
+          <button
+            onClick={handleSubmit}
+            className="flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg shadow-md transition-transform transform hover:scale-105 active:scale-95"
+            disabled={!selectedOption}
+          >
+            <Check className="w-5 h-5 mr-2" /> {/* Check icon for submit */}
+            Submit
+          </button>
+          <button
+            onClick={handleNext}
+            className="flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md transition-transform transform hover:scale-105 active:scale-95"
+          >
+            <ArrowRight className="w-5 h-5 mr-2" /> {/* Arrow icon for next */}
+            Next
+          </button>
+          <button
+            onClick={handleSkip}
+            className="flex items-center justify-center px-6 py-3 bg-red-600 text-white rounded-lg shadow-md transition-transform transform hover:scale-105 active:scale-95"
+          >
+            <X className="w-5 h-5 mr-2" /> {/* X icon for skip */}
+            Skip
+          </button>
+        </div>
+        <div className="mt-4">Score: {score}</div>
       </div>
     </div>
   );
 }
 
-const CARDS: CardItem[] = [
+// Highlight component
+export const Highlight = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <span
+      className={cn(
+        "font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-700/[0.2] dark:text-emerald-500 px-1 py-0.5",
+        className
+      )}
+    >
+      {children}
+    </span>
+  );
+};
+
+const CARDS = [
   {
     id: 0,
-    name: "Question 1",
-    designation: "General Knowledge",
+    name: "Difficulty:7",
+    designation: "Computer Science",
     content: (
-      <p className="text-black">
-        What is the capital of France?
+      <p>
+        Which data structure is used to implement recursion?
       </p>
     ),
-    correctAnswer: 'A'
+    options: ["Queue", "Stack", "Array", "Linked List"],
+    correctAnswer: "Stack",
   },
   {
     id: 1,
-    name: "Question 2",
-    designation: "Science",
+    name: "Difficulty:5",
+    designation: "Computer Science",
     content: (
-      <p className="text-black">
-        What is the chemical symbol for water?
+      <p>
+        Given an array of integers, find the maximum sum of a contiguous subarray.
       </p>
     ),
-    correctAnswer: 'B'
+    options: ["Kadane's Algorithm", "Divide and Conquer", "Dynamic Programming", "Greedy Algorithm"],
+    correctAnswer: "Kadane's Algorithm",
   },
   {
     id: 2,
-    name: "Question 3",
-    designation: "History",
+    name: "Difficulty:6",
+    designation: "Computer Science",
     content: (
-      <p className="text-black">
-        Who was the first President of the United States?
+      <p>
+        What is the time complexity of accessing an element in an array?
       </p>
     ),
-    correctAnswer: 'C'
+    options: ["O(n)", "O(log n)", "O(1)", "O(n log n)"],
+    correctAnswer: "O(1)",
   },
 ];

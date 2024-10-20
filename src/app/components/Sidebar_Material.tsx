@@ -6,7 +6,7 @@ import {
   IconArrowLeft,
   IconSettings,
 } from "@tabler/icons-react";
-import { Book,Flame ,History,LayoutDashboard,Search ,Volleyball,ArrowUpToLine} from 'lucide-react';
+import { Book,Flame ,History,LayoutDashboard,Search ,Volleyball,ArrowUpToLine,Bot} from 'lucide-react';
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -59,7 +59,13 @@ export function SidebarMaterial() {
           <Search className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
         ),
       },
-
+      {
+        label: "ChatBot",
+        href: "/",
+        icon: (
+          <Bot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        ),
+      },
     {
       label: "Logout",
       href: "/",
@@ -124,7 +130,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre"
       >
-        Smashify
+        Brainwave
       </motion.span>
     </Link>
   );

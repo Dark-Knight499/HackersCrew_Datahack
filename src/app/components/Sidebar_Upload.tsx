@@ -4,26 +4,24 @@ import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
 import {
   IconArrowLeft,
-  IconSettings,
 } from "@tabler/icons-react";
-import { Book,History,LayoutDashboard,Search ,Volleyball} from 'lucide-react';
+import { Book, History, LayoutDashboard, Search, Volleyball } from 'lucide-react';
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "../../utils/cn";
-import  { BentoGridDemo } from "./Material_content";
-import { ArrowUpToLine } from 'lucide-react';
+import { ArrowUpToLine,Bot } from 'lucide-react';
 import Upload_Content from "./Upload_Content";
 
 export function SidebarUpload() {
   const links = [
     {
-        label: "Upload",
-        href: "/uploaddata",
-        icon: (
-          <ArrowUpToLine className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-      },
+      label: "Upload",
+      href: "/uploaddata",
+      icon: (
+        <ArrowUpToLine className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
     {
       label: "Dashboard",
       href: "/home",
@@ -32,35 +30,40 @@ export function SidebarUpload() {
       ),
     },
     {
-        label: "Score",
-        href: "/score",
+      label: "Score",
+      href: "/score",
+      icon: (
+        <Volleyball className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Suggested Materials",
+      href: "/materials",
+      icon: (
+        <Book className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "History",
+      href: "/history",
+      icon: (
+        <History className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+      label: "Search",
+      href: "/search",
+      icon: (
+        <Search className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+      ),
+    },
+    {
+        label: "ChatBot",
+        href: "https://chatbot-datahack-847s.vercel.app/",
         icon: (
-          <Volleyball className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+          <Bot className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
         ),
       },
-
-      {
-        label: "Suggested Materials",
-        href: "/materials",
-        icon: ( 
-          <Book className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-      },
-      {
-        label: "History",
-        href: "/history",
-        icon: ( 
-          <History className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-      },
-      {
-        label: "Search",
-        href: "/search",
-        icon: ( 
-          <Search className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-        ),
-      },
-
     {
       label: "Logout",
       href: "/",
@@ -69,14 +72,13 @@ export function SidebarUpload() {
       ),
     },
   ];
-  
+
   const [open, setOpen] = useState(false);
-  
+
   return (
     <div
       className={cn(
-        "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full h-[100%] border border-neutral-200 dark:border-neutral-700 overflow-hidden",
-        "m-0" // Ensure no margin is applied
+        "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full h-screen border border-neutral-200 dark:border-neutral-700 overflow-hidden"
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
@@ -125,7 +127,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre"
       >
-        Smashify
+        Brainwave
       </motion.span>
     </Link>
   );
@@ -144,11 +146,11 @@ export const LogoIcon = () => {
 
 // Dummy dashboard component with content
 const Dashboard = () => {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 overflow-auto">
-        <div className="max-w-4xl w-full">
-          <Upload_Content />
-        </div>
+  return (
+    <div className="flex-1 flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 overflow-auto">
+      <div className="max-w-4xl w-full">
+        <Upload_Content />
       </div>
-    );
-  };
+    </div>
+  );
+};

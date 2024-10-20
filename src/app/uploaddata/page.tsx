@@ -1,16 +1,16 @@
-import React from 'react'
-import { SidebarUpload } from '../components/Sidebar_Upload'
-import Footer from '../components/Footer'
+import React from 'react';
+import { SidebarUpload } from '../components/Sidebar_Upload';
+import Footer from '../components/Footer';
 
-const page = () => {
-  return (<>
-    <div>
-      <SidebarUpload />
+const Page = () => {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow">
+        <SidebarUpload />
+      </div>
+      <Footer />
     </div>
-    <Footer />
-    </>
-    
-  )
-}
+  );
+};
 
-export default page
+export default Page;
